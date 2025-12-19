@@ -27,7 +27,9 @@
         .opt input { margin-right: 15px; transform: scale(1.4); }
         
         textarea { width: 100%; height: 120px; padding: 15px; border-radius: 10px; border: 2px solid #ddd; font-size: 1rem; box-sizing: border-box; }
-        .map-box { width: 100%; height: 400px; background: #ddd; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #ccc; background-image: url('map.png'); background-size: cover; background-position: center; z-index: 1; }
+        
+        /* 地図ボックス */
+        .map-box { width: 100%; height: 400px; background: #ddd; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #ccc; background-image: url('map.png'); background-size: cover; background-position: center; z-index: 1; cursor: crosshair; }
         #map-dot { position: absolute; width: 24px; height: 24px; background: red; border-radius: 50%; border: 3px solid white; transform: translate(-50%, -50%); pointer-events: none; z-index: 999; display: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
         .nav { display: flex; justify-content: space-between; margin-top: 30px; gap: 15px; }
@@ -39,6 +41,10 @@
         .btn-reset-small { position: fixed; bottom: 10px; right: 10px; padding: 8px 12px; font-size: 0.75rem; background: rgba(0,0,0,0.3); color: white; border-radius: 5px; z-index: 10000; width: auto; font-weight: normal; }
         .admin-section { margin-top: 500px; border-top: 1px dashed #ccc; padding-top: 20px; text-align: center; }
         .btn-admin { background: #333; color: white; font-size: 0.8rem; padding: 10px; margin: 5px; width: auto; display: inline-block; }
+
+        /* 集計マップ用レイヤー */
+        #summary-layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; overflow-y:auto; padding:20px; box-sizing:border-box; color:white; text-align:center;}
+        #summary-canvas { max-width:100%; border:2px solid white; margin-top:10px; }
     </style>
 </head>
 <body>
@@ -54,7 +60,7 @@
         <div class="admin-section">
             <button class="btn-admin" onclick="showMapSummary()">集計マップを表示</button>     
             <button class="btn-admin" onclick="downloadCSV()">CSVダウンロード</button>
-            <button class="btn-admin" style="background:#cc0000;" ...>データリセット</button>
+            <button class="btn-admin" style="background:#cc0000;" onclick="if(confirm('全データ消去？')) { localStorage.clear(); location.reload(); }">データリセット</button>
         </div>
     </div>
 
@@ -171,8 +177,20 @@
         <div class="map-box" onclick="setMap(event)">
             <div id="map-dot"></div>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(7)">戻る</button><button class="btn-next" onclick="move('s9')">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(7)">戻る</button><button class="btn-next" onclick="finish()">回答を完了する</button></div>
     </div>
+
+    <div id="qEnd" class="screen" style="text-align:center;">
+        <h2 style="border:none; margin-top:100px;">ご協力ありがとうございました</h2>
+        <button class="btn-start" onclick="location.reload()" style="background:var(--blue); margin-top:30px;">最初に戻る</button>
+    </div>
+</div>
+
+<div id="summary-layer">
+    <h3>集計結果マップ</h3>
+    <canvas id="summary-canvas"></canvas><br>
+    <button onclick="document.getElementById('summary-layer').style.display='none'" style="padding:10px 20px; margin-top:10px;">閉じる</button>
+</div>
 
     <div id="qs9" class="screen">
         <div class="section-box">
@@ -330,73 +348,38 @@
         window.scrollTo(0, 0);
     }
 
-    function isSenior() {
-        const val = document.querySelector('input[name="Q1"]:checked')?.value;
-        return ["50代", "60代", "70代以上"].includes(val);
-    }
     function isOutsider() {
         const val = document.querySelector('input[name="Q3"]:checked')?.value;
-        return ["その他(大洲市内)", "その他(愛媛県内)", "その他(愛媛県外)"].includes(val);
+        return val && val.includes("その他");
     }
-
     function toNextFromQ3() { if (isOutsider()) move(5); else move(4); }
     function backFromQ5() { if (isOutsider()) move(3); else move(4); }
 
-    // Q12の修正：未選択(null)の場合もQ14へ進むように変更
-    function branchQ12() {
-        const val = document.querySelector('input[name="Q12"]:checked')?.value;
-        if (val === "自動車") {
-            move(13);
-        } else {
-            // 自動車以外、または未選択の場合
-            move(14);
-        }
-    }
-    
-    function backFrom14() {
-        const val = document.querySelector('input[name="Q12"]:checked')?.value;
-        if (val === "自動車") move(13); else move(12);
-    }
-
-    function branchQ16() {
-        const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-        if (freq === "ほとんど使わない" || !freq) toNextFrom16(); else move(162);
-    }
-    function toNextFrom16() { if (isSenior()) move(11); else move(17); }
-    function backFrom11() {
-        const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-        if (freq === "ほとんど使わない" || !freq) move(16); else move(162);
-    }
-    function backFrom17() {
-        if (isSenior()) move(11); else {
-            const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-            if (freq === "ほとんど使わない" || !freq) move(16); else move(162);
-        }
-    }
-
+    // 地図タップ処理の修正
     function setMap(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const xPx = e.clientX - rect.left;
-    const yPx = e.clientY - rect.top;
+        const dot = document.getElementById('map-dot');
+        const rect = e.currentTarget.getBoundingClientRect();
+        const xPx = e.clientX - rect.left;
+        const yPx = e.clientY - rect.top;
 
-    // 比率（%）に変換：(位置 / 全体の幅) * 100
-    const xPct = (xPx / rect.width) * 100;
-    const yPct = (yPx / rect.height) * 100;
+        const xPct = (xPx / rect.width) * 100;
+        const yPct = (yPx / rect.height) * 100;
 
-    // ドットの配置も%指定に変更
-    dot.style.left = xPct + '%';
-    dot.style.top = yPct + '%';
+        dot.style.display = 'block';
+        dot.style.left = xPct + '%';
+        dot.style.top = yPct + '%';
 
-    currentMapCoord = `${xPct.toFixed(2)},${yPct.toFixed(2)}`; // 常に同じ場所を指す数値
-}
+        currentMapCoord = `${xPct.toFixed(2)},${yPct.toFixed(2)}`;
+    }
+
     function finish() {
         let row = [respondentId];
-        const s = ["Q1","Q3","Q4","Q5","Q6","Q11","Q12","Q16","Q17"];
+        const s = ["Q1","Q3","Q4","Q5","Q6"];
         let sV = {}; s.forEach(q => sV[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || "");
-        const m = ["Q2","Q7","Q9","Q10","Q14","Q15","Q162"];
+        const m = ["Q2","Q7"];
         let mV = {}; m.forEach(q => mV[q] = Array.from(document.querySelectorAll(`input[name="${q}"]:checked`)).map(i => i.value).join('|'));
 
-        row.push(sV["Q1"], mV["Q2"], sV["Q3"], sV["Q4"], sV["Q5"], sV["Q6"], mV["Q7"], currentMapCoord, mV["Q9"], mV["Q10"], sV["Q11"], document.getElementById('Q11_free').value.replace(/,/g,' '), sV["Q12"], document.getElementById('Q13_free').value.replace(/,/g,' '), mV["Q14"], mV["Q15"], sV["Q16"], mV["Q162"], sV["Q17"]);
+        row.push(sV["Q1"], mV["Q2"], sV["Q3"], sV["Q4"], sV["Q5"], sV["Q6"], mV["Q7"], currentMapCoord);
 
         let data = JSON.parse(localStorage.getItem('survey_data') || "[]");
         data.push(row);
@@ -405,40 +388,45 @@
         move('End');
     }
 
+    // 集計表示機能
     function showMapSummary() {
-    const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
-    const canvas = document.getElementById('summary-canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
+        const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
+        if (!data.length) return alert("データがありません");
 
-    img.onload = function() {
-        canvas.width = img.width;   // キャンバスを地図画像の解像度に合わせる
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        const canvas = document.getElementById('summary-canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
 
-        data.forEach(row => {
-            const coordStr = row[row.length - 1]; // 最後に保存した座標を取得
-            if (coordStr !== "未選択") {
-                const [xPct, yPct] = coordStr.split(',').map(Number);
-                const x = (xPct / 100) * canvas.width;  // %を画像サイズに合わせてピクセル復元
-                const y = (yPct / 100) * canvas.height;
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
 
-                // 赤い点を描画
-                ctx.beginPath();
-                ctx.arc(x, y, 15, 0, Math.PI * 2); 
-                ctx.fillStyle = "rgba(255, 0, 0, 0.7)";
-                ctx.fill();
-            }
-        });
-        document.getElementById('summary-layer').style.display = 'block';
-    };
-    img.src = 'map.png';
-}
+            data.forEach(row => {
+                const coordStr = row[row.length - 1]; // 最後の列が座標
+                if (coordStr && coordStr !== "未選択") {
+                    const [xPct, yPct] = coordStr.split(',').map(Number);
+                    const x = (xPct / 100) * canvas.width;
+                    const y = (yPct / 100) * canvas.height;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, 15, 0, Math.PI * 2); 
+                    ctx.fillStyle = "rgba(255, 0, 0, 0.7)";
+                    ctx.fill();
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                }
+            });
+            document.getElementById('summary-layer').style.display = 'block';
+        };
+        img.src = 'map.png'; // 地図画像ファイル名
+    }
 
     function downloadCSV() {
         const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
         if (!data.length) return alert("データなし");
-        let csv = "\uFEFFID,Q1年齢,Q2職,Q3居住地,Q4被災,Q5人数,Q6行きたい,Q7展示,Q8Map,Q9理由,Q10条件,Q11選,Q11自由,Q12手段,Q13車避難,Q14支援,Q15情報,Q16頻度,Q16_2目的,Q17意向\n";
+        let csv = "\uFEFFID,年齢,職業,居住地,被災,人数,行きたい,展示,座標\n";
         data.forEach(r => csv += r.join(",") + "\n");
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `survey.csv`; a.click();
@@ -446,6 +434,3 @@
 </script>
 </body>
 </html>
-
-
-
