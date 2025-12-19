@@ -15,6 +15,13 @@
         #id-display { position: absolute; top: 10px; left: 15px; font-size: 0.8rem; color: #999; font-weight: bold; }
         h2 { font-size: 1.3rem; color: #333; margin-bottom: 20px; border-left: 5px solid var(--blue); padding-left: 15px; line-height: 1.4; }
         .desc { background: #eef2f7; padding: 15px; border-radius: 10px; font-size: 0.95rem; margin-bottom: 20px; color: #444; }
+
+        /* セクション用スタイル */
+        .section-box { text-align: left; }
+        .section-title { font-size: 1.5rem; color: var(--blue); margin-bottom: 20px; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
+        .flex-row { display: flex; gap: 20px; align-items: flex-start; }
+        .flex-text { flex: 1; }
+        .flex-img { width: 200px; height: auto; border-radius: 8px; border: 1px solid #ddd; }
         
         .options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
         .opt { display: flex; align-items: center; padding: 15px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; font-size: 1.05rem; transition: 0.2s; }
@@ -127,6 +134,20 @@
         <div class="nav"><button class="btn-back" onclick="move(4)">戻る</button><button class="btn-next" onclick="move(6)">次へ</button></div>
     </div>
 
+    <div id="qs6" class="screen">
+        <div class="section-box">
+            <div class="section-title">伝承館に関する質問</div>
+            <div class="flex-row">
+                <div class="flex-text">
+                    <p>過去の水害災害を未来へ伝える伝承機能を持った拠点の創出を検討しています。</p>
+                    <p style="font-size: 0.9rem; color:#666;">（参考：雲仙岳災害記念館がまだすドーム）</p>
+                </div>
+                <img src="unzen.jpg" alt="参考画像" class="flex-img" onerror="this.src='https://via.placeholder.com/200x150?text=Reference+Image'">
+            </div>
+        </div>
+        <div class="nav"><button class="btn-back" onclick="move(5)">戻る</button><button class="btn-next" onclick="move(6)">質問へ進む</button></div>
+    </div>
+
     <div id="q6" class="screen">
         <h2>Q6. 水害の記憶を伝える場所ができたら、行ってみたいですか？</h2>
         <div class="options">
@@ -162,6 +183,14 @@
         <div class="nav"><button class="btn-back" onclick="move(7)">戻る</button><button class="btn-next" onclick="move(9)">次へ</button></div>
     </div>
 
+    <div id="qs9" class="screen">
+        <div class="section-box">
+            <div class="section-title">居住エリアの重心誘導について</div>
+            <p>災害リスク等の観点から、現在は東大洲に多い住宅地エリアを伊予大洲駅周辺エリアに誘導することを考えています。また、大洲市の将来的なまちづくりに関して検討しています。</p>
+        </div>
+        <div class="nav"><button class="btn-back" onclick="move(8)">戻る</button><button class="btn-next" onclick="move(9)">質問へ進む</button></div>
+    </div>
+
     <div id="q9" class="screen">
         <h2>Q9. 現在の居住地を選んだ理由を教えてください。（複数選択可）</h2>
         <div class="options">
@@ -191,16 +220,12 @@
         <div class="nav"><button class="btn-back" onclick="move(9)">戻る</button><button class="btn-next" onclick="move(11)">次へ</button></div>
     </div>
 
-    <div id="q11" class="screen">
-        <h2>Q11. 免許返納について</h2>
-        <div class="options">
-            <label class="opt"><input type="radio" name="Q11" value="返納済"> 返納している</label>
-            <label class="opt"><input type="radio" name="Q11" value="つもり"> 返納するつもり</label>
-            <label class="opt"><input type="radio" name="Q11" value="条件次第"> 環境次第で返納</label>
-            <label class="opt"><input type="radio" name="Q11" value="しない"> 返納しない</label>
+    <div id="qs12" class="screen">
+        <div class="section-box">
+            <div class="section-title">豪雨災害における避難について</div>
+            <p>防災力を高めるまちづくりについて考えています。</p>
         </div>
-        <textarea id="Q11_free" placeholder="理由など（自由記述）"></textarea>
-        <div class="nav"><button class="btn-back" onclick="move(10)">戻る</button><button class="btn-next" onclick="move(12)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(10)">戻る</button><button class="btn-next" onclick="move(12)">質問へ進む</button></div>
     </div>
 
     <div id="q12" class="screen">
@@ -217,7 +242,8 @@
 
     <div id="q13" class="screen">
         <h2>Q13. 車の避難先（自由記述）</h2>
-        <textarea id="Q13_free" placeholder="場所など"></textarea>
+        <p style="font-size: 0.9rem; color:#666;">※Q12で「自動車」と回答された方へ</p>
+        <textarea id="Q13_free" placeholder="具体的な場所など"></textarea>
         <div class="nav"><button class="btn-back" onclick="move(12)">戻る</button><button class="btn-next" onclick="move(14)">次へ</button></div>
     </div>
 
@@ -245,6 +271,14 @@
         <div class="nav"><button class="btn-back" onclick="move(14)">戻る</button><button class="btn-next" onclick="move(16)">次へ</button></div>
     </div>
 
+    <div id="qs16" class="screen">
+        <div class="section-box">
+            <div class="section-title">バスの利用について</div>
+            <p>将来のまちづくりと災害時利用の両面から、公共交通機関の利用について考えています。</p>
+        </div>
+        <div class="nav"><button class="btn-back" onclick="move(15)">戻る</button><button class="btn-next" onclick="move(16)">質問へ進む</button></div>
+    </div>
+
     <div id="q16" class="screen">
         <h2>Q16. 普段、バスを利用しますか？</h2>
         <div class="options">
@@ -267,6 +301,18 @@
         <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="move(17)">次へ</button></div>
     </div>
 
+    <div id="q11" class="screen">
+        <h2>Q11. 免許返納について</h2>
+        <div class="options">
+            <label class="opt"><input type="radio" name="Q11" value="返納済"> 返納している</label>
+            <label class="opt"><input type="radio" name="Q11" value="つもり"> 返納するつもり</label>
+            <label class="opt"><input type="radio" name="Q11" value="条件次第"> 環境次第で返納</label>
+            <label class="opt"><input type="radio" name="Q11" value="しない"> 返納しない</label>
+        </div>
+        <textarea id="Q11_free" placeholder="理由など（自由記述）"></textarea>
+        <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="move(17)">次へ</button></div>
+    </div>
+
     <div id="q17" class="screen">
         <h2>Q17. 災害時に避難所まで行けるバスがあった場合、利用したいですか？</h2>
         <div class="options">
@@ -284,7 +330,7 @@
     </div>
 </div>
 
-<script>
+    <script>
     let respondentId = localStorage.getItem('respondentId') || 1;
     document.getElementById('current-id').innerText = respondentId;
     let currentMapCoord = "未選択";
@@ -295,11 +341,23 @@
         window.scrollTo(0, 0);
     }
 
+    // Q12分岐
+    function branchQ12() {
+        const val = document.querySelector('input[name="Q12"]:checked')?.value;
+        if (val === "自動車") {
+            move(13);
+        } else if (val) {
+            move(14);
+        } else {
+            alert("項目を選択してください");
+        }
+    }
+
     // Q16分岐
     function branchQ16() {
         const freq = document.querySelector('input[name="Q16"]:checked')?.value;
         if (freq === "ほとんど使わない") {
-            move(17);
+            move(11);
         } else if (freq) {
             move(162);
         } else {
@@ -307,11 +365,9 @@
         }
     }
 
-    // 地図タップ：赤い点の表示位置修正
     function setMap(e) {
         const dot = document.getElementById('map-dot');
         const rect = e.currentTarget.getBoundingClientRect();
-        // iPad等のスクロール位置も考慮した座標計算
         const x = Math.round(e.clientX - rect.left);
         const y = Math.round(e.clientY - rect.top);
         dot.style.display = 'block';
@@ -321,55 +377,42 @@
     }
 
     function finish() {
-        // CSVのQ1からの順序に合わせたデータ抽出
-        let row = [];
-        row.push(respondentId); // ID
+        let row = [respondentId];
 
-        // 単一選択Q
+        // 単一選択Q（CSVの列順を考慮しつつ取得）
         const singles = ["Q1", "Q3", "Q4", "Q5", "Q6", "Q11", "Q12", "Q16", "Q17"];
-        let singleVals = {};
-        singles.forEach(q => {
-            singleVals[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || "";
-        });
+        let sVals = {};
+        singles.forEach(q => sVals[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || "");
 
         // 複数選択Q
         const multis = ["Q2", "Q7", "Q9", "Q10", "Q14", "Q15", "Q162"];
-        let multiVals = {};
-        multis.forEach(q => {
-            multiVals[q] = Array.from(document.querySelectorAll(`input[name="${q}"]:checked`)).map(i => i.value).join('|');
-        });
+        let mVals = {};
+        multis.forEach(q => mVals[q] = Array.from(document.querySelectorAll(`input[name="${q}"]:checked`)).map(i => i.value).join('|'));
 
-        // 自由記述・地図
-        const q11_free = document.getElementById('Q11_free').value.replace(/,/g, ' ');
-        const q13_free = document.getElementById('Q13_free').value.replace(/,/g, ' ');
+        // 指定の列順で配列を作成（以前のCSV構成を維持）
+        row.push(sVals["Q1"]);      // Q1
+        row.push(mVals["Q2"]);       // Q2
+        row.push(sVals["Q3"]);      // Q3
+        row.push(sVals["Q4"]);      // Q4
+        row.push(sVals["Q5"]);      // Q5
+        row.push(sVals["Q6"]);      // Q6
+        row.push(mVals["Q7"]);       // Q7
+        row.push(currentMapCoord);   // Q8
+        row.push(mVals["Q9"]);       // Q9
+        row.push(mVals["Q10"]);      // Q10
+        row.push(sVals["Q11"]);     // Q11選択
+        row.push(document.getElementById('Q11_free').value.replace(/,/g, ' ')); // Q11自由
+        row.push(sVals["Q12"]);     // Q12
+        row.push(document.getElementById('Q13_free').value.replace(/,/g, ' ')); // Q13
+        row.push(mVals["Q14"]);      // Q14
+        row.push(mVals["Q15"]);      // Q15
+        row.push(sVals["Q16"]);     // Q16
+        row.push(mVals["Q162"]);     // Q16_2
+        row.push(sVals["Q17"]);     // Q17
 
-        // Q1から順に配列に詰める
-        row.push(singleVals["Q1"]);      // Q1
-        row.push(multiVals["Q2"]);       // Q2
-        row.push(singleVals["Q3"]);      // Q3
-        row.push(singleVals["Q4"]);      // Q4
-        row.push(singleVals["Q5"]);      // Q5
-        row.push(singleVals["Q6"]);      // Q6
-        row.push(multiVals["Q7"]);       // Q7
-        row.push(currentMapCoord);       // Q8(Map)
-        row.push(multiVals["Q9"]);       // Q9
-        row.push(multiVals["Q10"]);      // Q10
-        row.push(singleVals["Q11"]);     // Q11選択
-        row.push(q11_free);              // Q11自由
-        row.push(singleVals["Q12"]);     // Q12
-        row.push(q13_free);              // Q13
-        row.push(multiVals["Q14"]);      // Q14
-        row.push(multiVals["Q15"]);      // Q15
-        row.push(singleVals["Q16"]);     // Q16
-        row.push(multiVals["Q162"]);     // Q16_2
-        row.push(singleVals["Q17"]);     // Q17
-
-        // 保存
         let storage = JSON.parse(localStorage.getItem('survey_data') || "[]");
         storage.push(row);
         localStorage.setItem('survey_data', JSON.stringify(storage));
-
-        // ID更新
         localStorage.setItem('respondentId', Number(respondentId) + 1);
         move('End');
     }
@@ -377,20 +420,16 @@
     function downloadCSV() {
         const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
         if (data.length === 0) return alert("データがありません");
-
-        let csv = "\uFEFFID,Q1年齢,Q2職,Q3居住地,Q4被災,Q5人数,Q6行きたい,Q7展示,Q8Map,Q9理由,Q10条件,Q11選択,Q11自由,Q12手段,Q13車避難,Q14支援,Q15情報,Q16頻度,Q16_2目的,Q17意向\n";
+        let csv = "\uFEFFID,Q1年齢,Q2職,Q3居住地,Q4被災,Q5人数,Q6行きたい,Q7展示,Q8Map,Q9理由,Q10条件,Q11選,Q11自由,Q12手段,Q13車避難,Q14支援,Q15情報,Q16頻度,Q16_2目的,Q17意向\n";
         data.forEach(r => { csv += r.join(",") + "\n"; });
-
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `daizu_survey_${new Date().toISOString().slice(0,10)}.csv`;
+        a.download = `survey_${new Date().toISOString().slice(0,10)}.csv`;
         a.click();
     }
 </script>
 
 </body>
 </html>
-
-
 
