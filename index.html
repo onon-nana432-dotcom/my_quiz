@@ -14,23 +14,19 @@
 
         #id-display { position: absolute; top: 10px; left: 15px; font-size: 0.8rem; color: #999; font-weight: bold; }
         h2 { font-size: 1.3rem; color: #333; margin-bottom: 20px; border-left: 5px solid var(--blue); padding-left: 15px; line-height: 1.4; }
-        .desc { background: #eef2f7; padding: 15px; border-radius: 10px; font-size: 0.95rem; margin-bottom: 20px; color: #444; }
-
-        /* セクション用スタイル */
+        
         .section-box { text-align: left; }
         .section-title { font-size: 1.5rem; color: var(--blue); margin-bottom: 20px; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
         .flex-row { display: flex; gap: 20px; align-items: flex-start; }
-        .flex-text { flex: 1; }
-        .flex-img { width: 200px; height: auto; border-radius: 8px; border: 1px solid #ddd; }
-        
+        .flex-text { flex: 1; line-height: 1.6; }
+        .flex-img { width: 220px; height: auto; border-radius: 8px; border: 1px solid #ddd; }
+
         .options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
         .opt { display: flex; align-items: center; padding: 15px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; font-size: 1.05rem; transition: 0.2s; }
         .opt:active { background: #f0f0f0; }
         .opt input { margin-right: 15px; transform: scale(1.4); }
         
         textarea { width: 100%; height: 120px; padding: 15px; border-radius: 10px; border: 2px solid #ddd; font-size: 1rem; box-sizing: border-box; }
-        
-        /* 地図エリアの修正：マーカーを最前面へ */
         .map-box { width: 100%; height: 400px; background: #ddd; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #ccc; background-image: url('map.png'); background-size: cover; background-position: center; z-index: 1; }
         #map-dot { position: absolute; width: 24px; height: 24px; background: red; border-radius: 50%; border: 3px solid white; transform: translate(-50%, -50%); pointer-events: none; z-index: 999; display: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
@@ -40,7 +36,7 @@
         .btn-back { background: var(--gray); color: white; }
         .btn-start { background: var(--green); color: white; width: 100%; font-size: 1.3rem; }
         
-        .btn-reset-small { position: fixed; bottom: 10px; right: 10px; padding: 5px 10px; font-size: 0.7rem; background: rgba(0,0,0,0.2); color: white; border-radius: 4px; width: auto; flex: none; font-weight: normal; z-index: 1000; }
+        .btn-reset-small { position: fixed; bottom: 10px; right: 10px; padding: 8px 12px; font-size: 0.75rem; background: rgba(0,0,0,0.3); color: white; border-radius: 5px; z-index: 10000; width: auto; font-weight: normal; }
         .admin-section { margin-top: 500px; border-top: 1px dashed #ccc; padding-top: 20px; text-align: center; }
         .btn-admin { background: #333; color: white; font-size: 0.8rem; padding: 10px; margin: 5px; width: auto; display: inline-block; }
     </style>
@@ -49,17 +45,15 @@
 
 <div class="container">
     <div id="id-display">回答者ID: <span id="current-id">1</span></div>
-    <button class="btn-reset-small" onclick="if(confirm('最初に戻りますか？現在の回答は保存されません。')) location.reload()">最初に戻る</button>
+    <button class="btn-reset-small" onclick="if(confirm('最初に戻りますか？')) location.reload();">最初に戻る</button>
 
     <div id="q0" class="screen active">
         <h1 style="text-align:center; margin-top:100px;">東京大学工学部<br>～大洲市の未来のまちを考える～</h1>
-        <p style="text-align:center; color:#666;">研究のためのアンケート調査にご協力をお願いいたします。</p>
-        <button class="btn-start" onclick="move(1)" style="margin-top:50px;">アンケートを始める</button>
-
+        <p style="text-align:center; color:#666; line-height: 1.8;">研究のためのアンケート調査にご協力をお願いいたします。</p>
+        <button class="btn-start" onclick="move(1)">アンケートを始める</button>
         <div class="admin-section">
-            <p style="font-size:0.7rem; color:#bbb;">管理者メニュー（下部に隠してあります）</p>
-            <button class="btn-admin" onclick="downloadCSV()">CSVをダウンロード</button>
-            <button class="btn-admin" style="background:#cc0000;" onclick="if(confirm('全てのデータを消去しますか？')) { localStorage.removeItem('survey_data'); localStorage.setItem('respondentId', 1); location.reload(); }">データ全消去</button>
+            <button class="btn-admin" onclick="downloadCSV()">CSVダウンロード</button>
+            <button class="btn-admin" style="background:#cc0000;" onclick="if(confirm('全データ消去？')) { localStorage.clear(); location.reload(); }">データ全消去</button>
         </div>
     </div>
 
@@ -104,13 +98,11 @@
             <label class="opt"><input type="radio" name="Q3" value="徳森"> 徳森</label>
             <label class="opt"><input type="radio" name="Q3" value="新谷"> 新谷</label>
             <label class="opt"><input type="radio" name="Q3" value="菅田町"> 菅田町</label>
-            <label class="opt"><input type="radio" name="Q3" value="柳沢"> 柳沢</label>
-            <label class="opt"><input type="radio" name="Q3" value="三善"> 三善</label>
             <label class="opt"><input type="radio" name="Q3" value="その他(大洲市内)"> その他(大洲市内)</label>
             <label class="opt"><input type="radio" name="Q3" value="その他(愛媛県内)"> その他(愛媛県内)</label>
             <label class="opt"><input type="radio" name="Q3" value="その他(愛媛県外)"> その他(愛媛県外)</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(2)">戻る</button><button class="btn-next" onclick="move(4)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(2)">戻る</button><button class="btn-next" onclick="toNextFromQ3()">次へ</button></div>
     </div>
 
     <div id="q4" class="screen">
@@ -131,7 +123,7 @@
             <label class="opt"><input type="radio" name="Q5" value="3人"> 3人</label>
             <label class="opt"><input type="radio" name="Q5" value="4人以上"> 4人以上</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(4)">戻る</button><button class="btn-next" onclick="move(6)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="backFromQ5()">戻る</button><button class="btn-next" onclick="move('s6')">次へ</button></div>
     </div>
 
     <div id="qs6" class="screen">
@@ -142,19 +134,19 @@
                     <p>過去の水害災害を未来へ伝える伝承機能を持った拠点の創出を検討しています。</p>
                     <p style="font-size: 0.9rem; color:#666;">（参考：雲仙岳災害記念館がまだすドーム）</p>
                 </div>
-                <img src="unzen.jpg" alt="参考画像" class="flex-img" onerror="this.src='https://via.placeholder.com/200x150?text=Reference+Image'">
+                <img src="unzen.jpg" alt="参考画像" class="flex-img" onerror="this.src='https://via.placeholder.com/220x150?text=Reference+Image'">
             </div>
         </div>
         <div class="nav"><button class="btn-back" onclick="move(5)">戻る</button><button class="btn-next" onclick="move(6)">質問へ進む</button></div>
     </div>
 
     <div id="q6" class="screen">
-        <h2>Q6. 水害の記憶を伝える場所ができたら、行ってみたいですか？</h2>
+        <h2>Q6. 水害の記憶を伝える伝承館ができたら、行ってみたいですか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q6" value="はい"> はい</label>
             <label class="opt"><input type="radio" name="Q6" value="いいえ"> いいえ</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(5)">戻る</button><button class="btn-next" onclick="move(7)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move('s6')">戻る</button><button class="btn-next" onclick="move(7)">次へ</button></div>
     </div>
 
     <div id="q7" class="screen">
@@ -166,27 +158,25 @@
             <label class="opt"><input type="checkbox" name="Q7" value="子ども展示"> 子ども向け体験展示</label>
             <label class="opt"><input type="checkbox" name="Q7" value="ARVR"> AR・VR疑似体験</label>
             <label class="opt"><input type="checkbox" name="Q7" value="屋内遊び場"> 子どもが遊べる屋内スペース</label>
-            <label class="opt"><input type="checkbox" name="Q7" value="学習スペース"> 勉強・読書フリースペース</label>
-            <label class="opt"><input type="checkbox" name="Q7" value="図書室"> 図書室</label>
+            <label class="opt"><input type="checkbox" name="Q7" value="学習スペース"> 勉強・読書スペース</label>
             <label class="opt"><input type="checkbox" name="Q7" value="カフェ"> カフェ・休憩所</label>
-            <label class="opt"><input type="checkbox" name="Q7" value="その他"> その他</label>
         </div>
         <div class="nav"><button class="btn-back" onclick="move(6)">戻る</button><button class="btn-next" onclick="move(8)">次へ</button></div>
     </div>
 
     <div id="q8" class="screen">
         <h2>Q8. 伝承館を作るなら、どこが良いと思いますか？</h2>
-        <p>地図上をタップしてください</p>
+        <p style="color:#666;">地図上をタップしてください</p>
         <div class="map-box" onclick="setMap(event)">
             <div id="map-dot"></div>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(7)">戻る</button><button class="btn-next" onclick="move(9)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(7)">戻る</button><button class="btn-next" onclick="move('s9')">次へ</button></div>
     </div>
 
     <div id="qs9" class="screen">
         <div class="section-box">
             <div class="section-title">居住エリアの重心誘導について</div>
-            <p>災害リスク等の観点から、現在は東大洲に多い住宅地エリアを伊予大洲駅周辺エリアに誘導することを考えています。また、大洲市の将来的なまちづくりに関して検討しています。</p>
+            <p>災害リスク等の観点から、現在は東大洲に多い住宅地エリアを伊予大洲駅周辺エリアに誘導することを検討しています。</p>
         </div>
         <div class="nav"><button class="btn-back" onclick="move(8)">戻る</button><button class="btn-next" onclick="move(9)">質問へ進む</button></div>
     </div>
@@ -198,11 +188,11 @@
             <label class="opt"><input type="checkbox" name="Q9" value="実家近"> 実家・親族が近い</label>
             <label class="opt"><input type="checkbox" name="Q9" value="地価家賃"> 地価・家賃が安い</label>
             <label class="opt"><input type="checkbox" name="Q9" value="通勤通学"> 通勤・通学に便利</label>
-            <label class="opt"><input type="checkbox" name="Q9" value="子育て"> 子育てがしやすい</label>
+             <label class="opt"><input type="checkbox" name="Q9" value="子育て"> 子育てがしやすい</label>
             <label class="opt"><input type="checkbox" name="Q9" value="低リスク"> 災害リスクが低い</label>
             <label class="opt"><input type="checkbox" name="Q9" value="その他"> その他</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(8)">戻る</button><button class="btn-next" onclick="move(10)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move('s9')">戻る</button><button class="btn-next" onclick="move(10)">次へ</button></div>
     </div>
 
     <div id="q10" class="screen">
@@ -211,13 +201,12 @@
             <label class="opt"><input type="checkbox" name="Q10" value="地価"> 地価が安い</label>
             <label class="opt"><input type="checkbox" name="Q10" value="店舗"> スーパー・店が近い</label>
             <label class="opt"><input type="checkbox" name="Q10" value="通勤通学"> 通勤・通学に便利</label>
-            <label class="opt"><input type="checkbox" name="Q10" value="公共交通"> 公共交通の充実</label>
+            <label class="opt"><input type="checkbox" name="Q10" value="交通"> 公共交通の充実</label>
             <label class="opt"><input type="checkbox" name="Q10" value="駐車場"> 駐車場が広い</label>
-            <label class="opt"><input type="checkbox" name="Q10" value="ピロティ"> ピロティ建築等補助</label>
             <label class="opt"><input type="checkbox" name="Q10" value="医療"> 病院などの医療機関が近い</label>
-            <label class="opt"><input type="checkbox" name="Q10" value="その他"> その他</label>
+            <label class="opt"><input type="checkbox" name="Q10" value="補助"> ピロティ建築等の補助</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(9)">戻る</button><button class="btn-next" onclick="move(11)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(9)">戻る</button><button class="btn-next" onclick="move('s12')">次へ</button></div>
     </div>
 
     <div id="qs12" class="screen">
@@ -231,19 +220,18 @@
     <div id="q12" class="screen">
         <h2>Q12. 避難指示があったときにどのように避難しますか？</h2>
         <div class="options">
-            <label class="opt"><input type="radio" name="Q12" value="車"> 自動車</label>
+            <label class="opt"><input type="radio" name="Q12" value="自動車"> 自動車</label>
             <label class="opt"><input type="radio" name="Q12" value="徒歩"> 徒歩</label>
             <label class="opt"><input type="radio" name="Q12" value="二輪"> 自転車・バイク</label>
             <label class="opt"><input type="radio" name="Q12" value="不要論"> 避難不要と考えている</label>
             <label class="opt"><input type="radio" name="Q12" value="その他"> その他</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(11)">戻る</button><button class="btn-next" onclick="move(13)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move('s12')">戻る</button><button class="btn-next" onclick="branchQ12()">次へ</button></div>
     </div>
 
     <div id="q13" class="screen">
         <h2>Q13. 車の避難先（自由記述）</h2>
-        <p style="font-size: 0.9rem; color:#666;">※Q12で「自動車」と回答された方へ</p>
-        <textarea id="Q13_free" placeholder="具体的な場所など"></textarea>
+        <textarea id="Q13_free" placeholder="場所など"></textarea>
         <div class="nav"><button class="btn-back" onclick="move(12)">戻る</button><button class="btn-next" onclick="move(14)">次へ</button></div>
     </div>
 
@@ -256,7 +244,7 @@
             <label class="opt"><input type="checkbox" name="Q14" value="物資"> 物資（水・食料）</label>
             <label class="opt"><input type="checkbox" name="Q14" value="その他"> その他</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(13)">戻る</button><button class="btn-next" onclick="move(15)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="backFrom14()">戻る</button><button class="btn-next" onclick="move(15)">次へ</button></div>
     </div>
 
     <div id="q15" class="screen">
@@ -268,13 +256,13 @@
             <label class="opt"><input type="checkbox" name="Q15" value="通行止め"> 道路の通行止め情報</label>
             <label class="opt"><input type="checkbox" name="Q15" value="タイミング"> 避難するタイミング</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(14)">戻る</button><button class="btn-next" onclick="move(16)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(14)">戻る</button><button class="btn-next" onclick="move('s16')">次へ</button></div>
     </div>
 
     <div id="qs16" class="screen">
         <div class="section-box">
             <div class="section-title">バスの利用について</div>
-            <p>将来のまちづくりと災害時利用の両面から、公共交通機関の利用について考えています。</p>
+            <p>公共交通機関の利用について考えています。</p>
         </div>
         <div class="nav"><button class="btn-back" onclick="move(15)">戻る</button><button class="btn-next" onclick="move(16)">質問へ進む</button></div>
     </div>
@@ -286,7 +274,7 @@
             <label class="opt"><input type="radio" name="Q16" value="たまに使う"> たまに使う</label>
             <label class="opt"><input type="radio" name="Q16" value="ほとんど使わない"> ほとんど使わない</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(15)">戻る</button><button class="btn-next" onclick="branchQ16()">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move('s16')">戻る</button><button class="btn-next" onclick="branchQ16()">次へ</button></div>
     </div>
 
     <div id="q162" class="screen">
@@ -298,19 +286,19 @@
             <label class="opt"><input type="checkbox" name="Q162" value="遊び"> 遊びに行くため</label>
             <label class="opt"><input type="checkbox" name="Q162" value="その他"> その他</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="move(17)">次へ</button></div>
+        <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="toNextFrom16()">次へ</button></div>
     </div>
 
     <div id="q11" class="screen">
-        <h2>Q11. 免許返納について</h2>
+        <h2>Q11. 将来、運転免許を返納するつもりはありますか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q11" value="返納済"> 返納している</label>
             <label class="opt"><input type="radio" name="Q11" value="つもり"> 返納するつもり</label>
-            <label class="opt"><input type="radio" name="Q11" value="条件次第"> 環境次第で返納</label>
+            <label class="opt"><input type="radio" name="Q11" value="条件次第"> 条件次第で返納する</label>
             <label class="opt"><input type="radio" name="Q11" value="しない"> 返納しない</label>
         </div>
-        <textarea id="Q11_free" placeholder="理由など（自由記述）"></textarea>
-        <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="move(17)">次へ</button></div>
+        <textarea id="Q11_free" placeholder="理由など"></textarea>
+        <div class="nav"><button class="btn-back" onclick="backFrom11()">戻る</button><button class="btn-next" onclick="move(17)">次へ</button></div>
     </div>
 
     <div id="q17" class="screen">
@@ -320,48 +308,63 @@
             <label class="opt"><input type="radio" name="Q17" value="自力避難"> 自力で避難する</label>
             <label class="opt"><input type="radio" name="Q17" value="様子見"> 様子を見る</label>
         </div>
-        <div class="nav"><button class="btn-back" onclick="move(16)">戻る</button><button class="btn-next" onclick="finish()">回答を完了する</button></div>
+        <div class="nav"><button class="btn-back" onclick="backFrom17()">戻る</button><button class="btn-next" onclick="finish()">回答を完了する</button></div>
     </div>
 
     <div id="qEnd" class="screen" style="text-align:center;">
-        <h2 style="border:none;">ご協力ありがとうございました</h2>
-        <p>回答は正常に保存されました。</p>
+        <h2 style="border:none; margin-top:100px;">ご協力ありがとうございました</h2>
         <button class="btn-start" onclick="location.reload()" style="background:var(--blue); margin-top:30px;">次の人へ</button>
     </div>
 </div>
 
-    <script>
+<script>
     let respondentId = localStorage.getItem('respondentId') || 1;
     document.getElementById('current-id').innerText = respondentId;
     let currentMapCoord = "未選択";
 
     function move(n) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('q' + n).classList.add('active');
+        const target = document.getElementById('q' + n);
+        if(target) target.classList.add('active');
         window.scrollTo(0, 0);
     }
 
-    // Q12分岐
-    function branchQ12() {
-        const val = document.querySelector('input[name="Q12"]:checked')?.value;
-        if (val === "自動車") {
-            move(13);
-        } else if (val) {
-            move(14);
-        } else {
-            alert("項目を選択してください");
-        }
+    // 分岐用判定関数
+    function isSenior() {
+        const val = document.querySelector('input[name="Q1"]:checked')?.value;
+        return ["50代", "60代", "70代以上"].includes(val);
+    }
+    function isOutsider() {
+        const val = document.querySelector('input[name="Q3"]:checked')?.value;
+        return ["その他(大洲市内)", "その他(愛媛県内)", "その他(愛媛県外)"].includes(val);
     }
 
-    // Q16分岐
+    // 各画面のボタン制御
+    function toNextFromQ3() { if (isOutsider()) move(5); else move(4); }
+    function backFromQ5() { if (isOutsider()) move(3); else move(4); }
+
+    function branchQ12() {
+        const val = document.querySelector('input[name="Q12"]:checked')?.value;
+        if (val === "自動車") move(13); else if(val) move(14); else alert("選択してください");
+    }
+    function backFrom14() {
+        const val = document.querySelector('input[name="Q12"]:checked')?.value;
+        if (val === "自動車") move(13); else move(12);
+    }
+
     function branchQ16() {
         const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-        if (freq === "ほとんど使わない") {
-            move(11);
-        } else if (freq) {
-            move(162);
-        } else {
-            alert("項目を選択してください");
+        if (freq === "ほとんど使わない") toNextFrom16(); else if(freq) move(162); else alert("選択してください");
+    }
+    function toNextFrom16() { if (isSenior()) move(11); else move(17); }
+    function backFrom11() {
+        const freq = document.querySelector('input[name="Q16"]:checked')?.value;
+        if (freq === "ほとんど使わない") move(16); else move(162);
+    }
+    function backFrom17() {
+        if (isSenior()) move(11); else {
+            const freq = document.querySelector('input[name="Q16"]:checked')?.value;
+            if (freq === "ほとんど使わない") move(16); else move(162);
         }
     }
 
@@ -370,66 +373,34 @@
         const rect = e.currentTarget.getBoundingClientRect();
         const x = Math.round(e.clientX - rect.left);
         const y = Math.round(e.clientY - rect.top);
-        dot.style.display = 'block';
-        dot.style.left = x + 'px';
-        dot.style.top = y + 'px';
+        dot.style.display = 'block'; dot.style.left = x + 'px'; dot.style.top = y + 'px';
         currentMapCoord = `${x},${y}`;
     }
 
     function finish() {
         let row = [respondentId];
+        const s = ["Q1","Q3","Q4","Q5","Q6","Q11","Q12","Q16","Q17"];
+        let sV = {}; s.forEach(q => sV[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || "");
+        const m = ["Q2","Q7","Q9","Q10","Q14","Q15","Q162"];
+        let mV = {}; m.forEach(q => mV[q] = Array.from(document.querySelectorAll(`input[name="${q}"]:checked`)).map(i => i.value).join('|'));
 
-        // 単一選択Q（CSVの列順を考慮しつつ取得）
-        const singles = ["Q1", "Q3", "Q4", "Q5", "Q6", "Q11", "Q12", "Q16", "Q17"];
-        let sVals = {};
-        singles.forEach(q => sVals[q] = document.querySelector(`input[name="${q}"]:checked`)?.value || "");
+        row.push(sV["Q1"], mV["Q2"], sV["Q3"], sV["Q4"], sV["Q5"], sV["Q6"], mV["Q7"], currentMapCoord, mV["Q9"], mV["Q10"], sV["Q11"], document.getElementById('Q11_free').value.replace(/,/g,' '), sV["Q12"], document.getElementById('Q13_free').value.replace(/,/g,' '), mV["Q14"], mV["Q15"], sV["Q16"], mV["Q162"], sV["Q17"]);
 
-        // 複数選択Q
-        const multis = ["Q2", "Q7", "Q9", "Q10", "Q14", "Q15", "Q162"];
-        let mVals = {};
-        multis.forEach(q => mVals[q] = Array.from(document.querySelectorAll(`input[name="${q}"]:checked`)).map(i => i.value).join('|'));
-
-        // 指定の列順で配列を作成（以前のCSV構成を維持）
-        row.push(sVals["Q1"]);      // Q1
-        row.push(mVals["Q2"]);       // Q2
-        row.push(sVals["Q3"]);      // Q3
-        row.push(sVals["Q4"]);      // Q4
-        row.push(sVals["Q5"]);      // Q5
-        row.push(sVals["Q6"]);      // Q6
-        row.push(mVals["Q7"]);       // Q7
-        row.push(currentMapCoord);   // Q8
-        row.push(mVals["Q9"]);       // Q9
-        row.push(mVals["Q10"]);      // Q10
-        row.push(sVals["Q11"]);     // Q11選択
-        row.push(document.getElementById('Q11_free').value.replace(/,/g, ' ')); // Q11自由
-        row.push(sVals["Q12"]);     // Q12
-        row.push(document.getElementById('Q13_free').value.replace(/,/g, ' ')); // Q13
-        row.push(mVals["Q14"]);      // Q14
-        row.push(mVals["Q15"]);      // Q15
-        row.push(sVals["Q16"]);     // Q16
-        row.push(mVals["Q162"]);     // Q16_2
-        row.push(sVals["Q17"]);     // Q17
-
-        let storage = JSON.parse(localStorage.getItem('survey_data') || "[]");
-        storage.push(row);
-        localStorage.setItem('survey_data', JSON.stringify(storage));
+        let data = JSON.parse(localStorage.getItem('survey_data') || "[]");
+        data.push(row);
+        localStorage.setItem('survey_data', JSON.stringify(data));
         localStorage.setItem('respondentId', Number(respondentId) + 1);
         move('End');
     }
 
     function downloadCSV() {
         const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
-        if (data.length === 0) return alert("データがありません");
+        if (!data.length) return alert("データなし");
         let csv = "\uFEFFID,Q1年齢,Q2職,Q3居住地,Q4被災,Q5人数,Q6行きたい,Q7展示,Q8Map,Q9理由,Q10条件,Q11選,Q11自由,Q12手段,Q13車避難,Q14支援,Q15情報,Q16頻度,Q16_2目的,Q17意向\n";
-        data.forEach(r => { csv += r.join(",") + "\n"; });
+        data.forEach(r => csv += r.join(",") + "\n");
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `survey_${new Date().toISOString().slice(0,10)}.csv`;
-        a.click();
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `survey.csv`; a.click();
     }
 </script>
-
 </body>
 </html>
-
