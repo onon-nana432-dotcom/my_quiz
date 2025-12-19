@@ -45,8 +45,8 @@
     <button class="btn-reset-small" onclick="if(confirm('最初に戻りますか？現在の回答は保存されません。')) location.reload()">最初に戻る</button>
 
     <div id="q0" class="screen active">
-        <h1 style="text-align:center; margin-top:100px;">東京大学工学部<br>～大洲市の未来のまちを考える～<br>研究のためのアンケート</h1>
-        <p style="text-align:center; color:#666;">ご協力をお願いいたします。</p>
+        <h1 style="text-align:center; margin-top:100px;">東京大学工学部<br>～大洲市の未来のまちを考える～</h1>
+        <p style="text-align:center; color:#666;">研究のためのアンケート調査にご協力をお願いいたします。</p>
         <button class="btn-start" onclick="move(1)" style="margin-top:50px;">アンケートを始める</button>
 
         <div class="admin-section">
@@ -57,7 +57,7 @@
     </div>
 
     <div id="q1" class="screen">
-        <h2>Q1. 年齢</h2>
+        <h2>Q1. 年齢を教えてください。</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q1" value="10代以下"> 10代以下</label>
             <label class="opt"><input type="radio" name="Q1" value="20代"> 20代</label>
@@ -71,7 +71,7 @@
     </div>
 
     <div id="q2" class="screen">
-        <h2>Q2. 職業（複数選択可）</h2>
+        <h2>Q2. 今のお仕事や状況を教えてください。（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q2" value="会社員・公務員"> 会社員・公務員</label>
             <label class="opt"><input type="checkbox" name="Q2" value="自営業・フリーランス"> 自営業・フリーランス</label>
@@ -83,7 +83,7 @@
     </div>
 
     <div id="q3" class="screen">
-        <h2>Q3. 居住地</h2>
+        <h2>Q3. どのあたりにお住まいですか？</h2>
         <div class="options" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
             <label class="opt"><input type="radio" name="Q3" value="大洲"> 大洲</label>
             <label class="opt"><input type="radio" name="Q3" value="中村"> 中村</label>
@@ -99,13 +99,15 @@
             <label class="opt"><input type="radio" name="Q3" value="菅田町"> 菅田町</label>
             <label class="opt"><input type="radio" name="Q3" value="柳沢"> 柳沢</label>
             <label class="opt"><input type="radio" name="Q3" value="三善"> 三善</label>
-            <label class="opt"><input type="radio" name="Q3" value="その他"> その他</label>
+            <label class="opt"><input type="radio" name="Q3" value="その他(大洲市内)"> その他(大洲市内)</label>
+            <label class="opt"><input type="radio" name="Q3" value="その他(愛媛県内)"> その他(愛媛県内)</label>
+            <label class="opt"><input type="radio" name="Q3" value="その他(愛媛県外)"> その他(愛媛県外)</label>
         </div>
         <div class="nav"><button class="btn-back" onclick="move(2)">戻る</button><button class="btn-next" onclick="move(4)">次へ</button></div>
     </div>
 
     <div id="q4" class="screen">
-        <h2>Q4. 水害の被災経験の有無</h2>
+        <h2>Q4. これまでに大洲で水害にあったことはありますか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q4" value="ある(大)"> ある(大きな被害が出た)</label>
             <label class="opt"><input type="radio" name="Q4" value="ある(小)"> ある(少しの被害だった)</label>
@@ -115,7 +117,7 @@
     </div>
 
     <div id="q5" class="screen">
-        <h2>Q5. 同居者の人数</h2>
+        <h2>Q5. 同居者の人数を教えてください。</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q5" value="1人"> 1人（単身）</label>
             <label class="opt"><input type="radio" name="Q5" value="2人"> 2人</label>
@@ -126,7 +128,7 @@
     </div>
 
     <div id="q6" class="screen">
-        <h2>Q6. 伝承館に行きたいと思いますか</h2>
+        <h2>Q6. 水害の記憶を伝える場所ができたら、行ってみたいですか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q6" value="はい"> はい</label>
             <label class="opt"><input type="radio" name="Q6" value="いいえ"> いいえ</label>
@@ -135,7 +137,7 @@
     </div>
 
     <div id="q7" class="screen">
-        <h2>Q7. 伝承館に行きたい展示内容（複数可）</h2>
+        <h2>Q7. どのような展示内容があれば伝承館に行きたいと思いますか？（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q7" value="写真映像"> 当時の写真・映像パネル</label>
             <label class="opt"><input type="checkbox" name="Q7" value="体験談"> 被災者の体験談コーナー</label>
@@ -152,7 +154,7 @@
     </div>
 
     <div id="q8" class="screen">
-        <h2>Q8. 伝承館を設置したい場所</h2>
+        <h2>Q8. 伝承館を作るなら、どこが良いと思いますか？</h2>
         <p>地図上をタップしてください</p>
         <div class="map-box" onclick="setMap(event)">
             <div id="map-dot"></div>
@@ -161,7 +163,7 @@
     </div>
 
     <div id="q9" class="screen">
-        <h2>Q9. 現在の居住地を選んだ理由（複数可）</h2>
+        <h2>Q9. 現在の居住地を選んだ理由を教えてください。（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q9" value="昔から"> 昔から住んでいる</label>
             <label class="opt"><input type="checkbox" name="Q9" value="実家近"> 実家・親族が近い</label>
@@ -175,7 +177,7 @@
     </div>
 
     <div id="q10" class="screen">
-        <h2>Q10. 伊予大洲駅周辺に住みたい条件（複数可）</h2>
+        <h2>Q10. どのような条件があれば伊予大洲駅周辺エリアに住みたいと思いますか？（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q10" value="地価"> 地価が安い</label>
             <label class="opt"><input type="checkbox" name="Q10" value="店舗"> スーパー・店が近い</label>
@@ -202,7 +204,7 @@
     </div>
 
     <div id="q12" class="screen">
-        <h2>Q12. 避難指示時の避難手段</h2>
+        <h2>Q12. 避難指示があったときにどのように避難しますか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q12" value="車"> 自動車</label>
             <label class="opt"><input type="radio" name="Q12" value="徒歩"> 徒歩</label>
@@ -220,7 +222,7 @@
     </div>
 
     <div id="q14" class="screen">
-        <h2>Q14. 避難時に欲しい支援（複数可）</h2>
+        <h2>Q14. 避難するときにほしい支援を選んでください。（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q14" value="バス輸送"> バスによる輸送</label>
             <label class="opt"><input type="checkbox" name="Q14" value="情報"> 情報提供</label>
@@ -232,7 +234,7 @@
     </div>
 
     <div id="q15" class="screen">
-        <h2>Q15. 避難時に欲しい情報（複数可）</h2>
+        <h2>Q15. 避難時に欲しい情報を選んでください。（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q15" value="場所空き"> 避難所の場所・空き状況</label>
             <label class="opt"><input type="checkbox" name="Q15" value="設備"> 避難所の設備</label>
@@ -244,7 +246,7 @@
     </div>
 
     <div id="q16" class="screen">
-        <h2>Q16. 普段のバス利用頻度</h2>
+        <h2>Q16. 普段、バスを利用しますか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q16" value="よく使う"> よく使う</label>
             <label class="opt"><input type="radio" name="Q16" value="たまに使う"> たまに使う</label>
@@ -254,7 +256,7 @@
     </div>
 
     <div id="q162" class="screen">
-        <h2>Q16_2. バスの利用目的（複数可）</h2>
+        <h2>Q16_2. バスの利用目的を教えてください。（複数選択可）</h2>
         <div class="options">
             <label class="opt"><input type="checkbox" name="Q162" value="通勤通学"> 通勤・通学</label>
             <label class="opt"><input type="checkbox" name="Q162" value="通院"> 通院</label>
@@ -266,7 +268,7 @@
     </div>
 
     <div id="q17" class="screen">
-        <h2>Q17. 災害時のバス利用意向</h2>
+        <h2>Q17. 災害時に避難所まで行けるバスがあった場合、利用したいですか？</h2>
         <div class="options">
             <label class="opt"><input type="radio" name="Q17" value="すぐ乗る"> すぐに乗って避難する</label>
             <label class="opt"><input type="radio" name="Q17" value="自力避難"> 自力で避難する</label>
@@ -389,5 +391,6 @@
 
 </body>
 </html>
+
 
 
