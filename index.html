@@ -374,14 +374,20 @@
     }
 
     function setMap(e) {
-        const dot = document.getElementById('map-dot');
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = Math.round(e.clientX - rect.left);
-        const y = Math.round(e.clientY - rect.top);
-        dot.style.display = 'block'; dot.style.left = x + 'px'; dot.style.top = y + 'px';
-        currentMapCoord = `${x},${y}`;
-    }
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xPx = e.clientX - rect.left;
+    const yPx = e.clientY - rect.top;
 
+    // 比率（%）に変換：(位置 / 全体の幅) * 100
+    const xPct = (xPx / rect.width) * 100;
+    const yPct = (yPx / rect.height) * 100;
+
+    // ドットの配置も%指定に変更
+    dot.style.left = xPct + '%';
+    dot.style.top = yPct + '%';
+
+    currentMapCoord = `${xPct.toFixed(2)},${yPct.toFixed(2)}`; // 常に同じ場所を指す数値
+}
     function finish() {
         let row = [respondentId];
         const s = ["Q1","Q3","Q4","Q5","Q6","Q11","Q12","Q16","Q17"];
@@ -398,6 +404,36 @@
         move('End');
     }
 
+    function showMapSummary() {
+    const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
+    const canvas = document.getElementById('summary-canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    img.onload = function() {
+        canvas.width = img.width;   // キャンバスを地図画像の解像度に合わせる
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        data.forEach(row => {
+            const coordStr = row[row.length - 1]; // 最後に保存した座標を取得
+            if (coordStr !== "未選択") {
+                const [xPct, yPct] = coordStr.split(',').map(Number);
+                const x = (xPct / 100) * canvas.width;  // %を画像サイズに合わせてピクセル復元
+                const y = (yPct / 100) * canvas.height;
+
+                // 赤い点を描画
+                ctx.beginPath();
+                ctx.arc(x, y, 15, 0, Math.PI * 2); 
+                ctx.fillStyle = "rgba(255, 0, 0, 0.7)";
+                ctx.fill();
+            }
+        });
+        document.getElementById('summary-layer').style.display = 'block';
+    };
+    img.src = 'map.png';
+}
+
     function downloadCSV() {
         const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
         if (!data.length) return alert("データなし");
@@ -409,4 +445,5 @@
 </script>
 </body>
 </html>
+
 
