@@ -43,9 +43,29 @@
         .btn-admin { background: #333; color: white; font-size: 0.8rem; padding: 10px; margin: 5px; width: auto; display: inline-block; }
 
         /* 集計マップ用レイヤー */
-        #summary-layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; overflow-y:auto; padding:20px; box-sizing:border-box; color:white; text-align:center;}
-        #summary-canvas { max-width:100%; border:2px solid white; margin-top:10px; }
-    </style>
+        /* 集計マップ用レイヤー（ここを差し替え） */
+#summary-layer { 
+    display:none; 
+    position:fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    background:rgba(0,0,0,0.95); 
+    z-index:999999; /* 非常に大きくして最前面に */
+    overflow-y:auto; 
+    padding:20px; 
+    box-sizing:border-box; 
+    color:white; 
+    text-align:center;
+}
+#summary-canvas { 
+    max-width: 95%; /* 画面からはみ出さない */
+    height: auto; 
+    border: 3px solid white; 
+    margin-top: 10px; 
+    background: white; /* 地図が透明な場合でも見えるように */
+}
 </head>
 <body>
 
@@ -390,38 +410,47 @@
 
     // 集計表示機能
     function showMapSummary() {
-        const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
-        if (!data.length) return alert("データがありません");
+    const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
+    if (!data.length) return alert("まだ回答データがありません");
 
-        const canvas = document.getElementById('summary-canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
+    const canvas = document.getElementById('summary-canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
 
-        img.onload = function() {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
+    img.onload = function() {
+        // 解像度を画像の実寸に合わせる
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-            data.forEach(row => {
-                const coordStr = row[row.length - 1]; // 最後の列が座標
-                if (coordStr && coordStr !== "未選択") {
-                    const [xPct, yPct] = coordStr.split(',').map(Number);
-                    const x = (xPct / 100) * canvas.width;
-                    const y = (yPct / 100) * canvas.height;
+        data.forEach(row => {
+            // 配列の最後から1番目が座標データ
+            const coordStr = row[row.length - 1]; 
+            if (coordStr && coordStr !== "未選択" && coordStr.includes(',')) {
+                const parts = coordStr.split(',');
+                const xPct = parseFloat(parts[0]);
+                const yPct = parseFloat(parts[1]);
 
-                    ctx.beginPath();
-                    ctx.arc(x, y, 15, 0, Math.PI * 2); 
-                    ctx.fillStyle = "rgba(255, 0, 0, 0.7)";
-                    ctx.fill();
-                    ctx.strokeStyle = "white";
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-                }
-            });
-            document.getElementById('summary-layer').style.display = 'block';
-        };
-        img.src = 'map.png'; // 地図画像ファイル名
-    }
+                const x = (xPct / 100) * canvas.width;
+                const y = (yPct / 100) * canvas.height;
+
+                // 赤い点を描画
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2); // 少し大きく(20)設定
+                ctx.fillStyle = "rgba(255, 0, 0, 0.8)";
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 5;
+                ctx.stroke();
+            }
+        });
+        document.getElementById('summary-layer').style.display = 'block';
+        window.scrollTo(0,0); // 念のため最上部へ
+    };
+    
+    // キャッシュ対策をして読み込み
+    img.src = 'map.png?' + new Date().getTime(); 
+}
 
     function downloadCSV() {
         const data = JSON.parse(localStorage.getItem('survey_data') || "[]");
@@ -434,3 +463,4 @@
 </script>
 </body>
 </html>
+
