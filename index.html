@@ -52,8 +52,9 @@
         <p style="text-align:center; color:#666; line-height: 1.8;">研究のためのアンケート調査にご協力をお願いいたします。</p>
         <button class="btn-start" onclick="move(1)">アンケートを始める</button>
         <div class="admin-section">
+            <button class="btn-admin" onclick="showMapSummary()">集計マップを表示</button>     
             <button class="btn-admin" onclick="downloadCSV()">CSVダウンロード</button>
-            <button class="btn-admin" style="background:#cc0000;" onclick="if(confirm('全データ消去？')) { localStorage.clear(); location.reload(); }">データ全消去</button>
+            <button class="btn-admin" style="background:#cc0000;" ...>データリセット</button>
         </div>
     </div>
 
@@ -445,5 +446,6 @@
 </script>
 </body>
 </html>
+
 
 
