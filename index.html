@@ -313,7 +313,7 @@
 
     <div id="qEnd" class="screen" style="text-align:center;">
         <h2 style="border:none; margin-top:100px;">ご協力ありがとうございました</h2>
-        <button class="btn-start" onclick="location.reload()" style="background:var(--blue); margin-top:30px;">次の人へ</button>
+        <button class="btn-start" onclick="location.reload()" style="background:var(--blue); margin-top:30px;">最初に戻る</button>
     </div>
 </div>
 
@@ -329,7 +329,6 @@
         window.scrollTo(0, 0);
     }
 
-    // 分岐用判定関数
     function isSenior() {
         const val = document.querySelector('input[name="Q1"]:checked')?.value;
         return ["50代", "60代", "70代以上"].includes(val);
@@ -339,14 +338,20 @@
         return ["その他(大洲市内)", "その他(愛媛県内)", "その他(愛媛県外)"].includes(val);
     }
 
-    // 各画面のボタン制御
     function toNextFromQ3() { if (isOutsider()) move(5); else move(4); }
     function backFromQ5() { if (isOutsider()) move(3); else move(4); }
 
+    // Q12の修正：未選択(null)の場合もQ14へ進むように変更
     function branchQ12() {
         const val = document.querySelector('input[name="Q12"]:checked')?.value;
-        if (val === "自動車") move(13); else if(val) move(14); else alert("選択してください");
+        if (val === "自動車") {
+            move(13);
+        } else {
+            // 自動車以外、または未選択の場合
+            move(14);
+        }
     }
+    
     function backFrom14() {
         const val = document.querySelector('input[name="Q12"]:checked')?.value;
         if (val === "自動車") move(13); else move(12);
@@ -354,17 +359,17 @@
 
     function branchQ16() {
         const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-        if (freq === "ほとんど使わない") toNextFrom16(); else if(freq) move(162); else alert("選択してください");
+        if (freq === "ほとんど使わない" || !freq) toNextFrom16(); else move(162);
     }
     function toNextFrom16() { if (isSenior()) move(11); else move(17); }
     function backFrom11() {
         const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-        if (freq === "ほとんど使わない") move(16); else move(162);
+        if (freq === "ほとんど使わない" || !freq) move(16); else move(162);
     }
     function backFrom17() {
         if (isSenior()) move(11); else {
             const freq = document.querySelector('input[name="Q16"]:checked')?.value;
-            if (freq === "ほとんど使わない") move(16); else move(162);
+            if (freq === "ほとんど使わない" || !freq) move(16); else move(162);
         }
     }
 
